@@ -19,7 +19,7 @@ String score = "" ;
 String action = "" ;
 String couleur = "" ;
 String localisation = "" ;
-String what = "" ;
+String where = "" ;
 
 int state;
 int R ;
@@ -149,7 +149,7 @@ void setup()
     bus = new Ivy("sra_tts_bridge", " sra_tts_bridge is ready", null);
     bus.start("127.255.255.255:2010");
     
-    bus.bindMsg("^sra5 Parsed=action=(.*) what=(.*) form=(.*) color=(.*) localisation=(.*)  Confidence=(.*) NP=*", new IvyMessageListener()
+    bus.bindMsg("^sra5 Parsed=action=(.*) where=(.*) form=(.*) color=(.*) localisation=(.*) Confidence=(.*) NP=*", new IvyMessageListener()
     {
       public void receive(IvyClient client,String[] args)
       {
@@ -158,7 +158,7 @@ void setup()
         state = CONCEPT;
         
         action = args[0];
-        what = args[1];
+        where = args[1];
         forme = args[2];
         couleur= args[3];
         localisation= args[4];
