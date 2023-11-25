@@ -100,24 +100,16 @@ void randomColorShape(shapes shape){
 }
 
 create_mae set_state_mae(){
-  if (action == "CREATE"){
-    println(conf);
-    println(couleur);
-    create_mae at ;
-      if(couleur == "" && localisation != ""){
-        at = create_mae.RANDOM_COLOR;
-      }
-      else if(localisation == "" && couleur != ""){
-          at = create_mae.RANDOM_LOC;
-      }
-      else if( localisation == "" && couleur == ""){
-        at = create_mae.RANDOM_LOC_COLOR;
+  println("CREATE");
+  if (action.equals("CREATE")){
+    println("in creat");
+      if(couleur.equals("undefined")){
+        println("in random_color");
+        return create_mae.RANDOM_COLOR;
       }
       else {
-        at = create_mae.CREATE_GIVEN_PARAM;
+        return create_mae.CREATE_GIVEN_PARAM;
       }
-      println(at);
-      return at;
   }
   else if (action == "MOVE"){
     
@@ -160,9 +152,16 @@ void setup()
         couleur= args[3];
         localisation= args[4];
         
+        println("action = " + action);
+        println("where = " + where);
+        println("forme = " + forme);
+        println("couleur = " + couleur);
+        println("localisation = " + localisation);
+        
         score = args[5];
         String modifiedString = score.replace(',', '.');
         conf = Float.parseFloat(modifiedString);
+        
         state_mae = set_state_mae();
       }        
     }
@@ -172,7 +171,7 @@ void setup()
     {
       public void receive(IvyClient client,String[] args)
       {
-        message = "Parle mieux mon gaw, moi pas compris "; 
+        message = "Veuillez je vous prie vous exprimez plus clairement en articulant lentement"; 
         state = NON_RECONNU;
       }        
     });    
@@ -199,11 +198,8 @@ void setup()
 
 void draw()
 {
-  background(0);
- 
   switch(state) {
     case INIT:
-      message = " Ola mon gaw tu peux parler maintenant là ";
       try {
           bus.sendMsg("ppilot5 Say=" + message); 
       }
@@ -230,56 +226,35 @@ void draw()
       state = ATTENTE;
       break;
       
-      
-      
-      
-      
-      
-      
      case CONCEPT:  
        try {
           bus.sendMsg("ppilot5 Say=" + message); 
           println(conf);
-          println("in creat");
+          println("in CONCEPT");
        }
        catch (IvyException e) {}
        
        if (conf >= 0.8){
-         
-         if (action == "CREATE"){
-           //dessin function
+         println("conf >= 0.8");
+         if (action.equals("CREATE")){
+            println("in CREATE");
             switch(state_mae){
               case RANDOM_COLOR :
-                 if(forme == "TRIANGLE") {
-                   randomColorShape(shapes.TRIANGL);
+                 if(!mousePressed){
+                   break;
                  }
-                 else if(forme == "RECTANGLE") {
+                 if(forme.equals("TRIANGLE")) {
+                     randomColorShape(shapes.TRIANGL);
+                 }
+                 else if(forme.equals("RECTANGLE")) {
                    randomColorShape(shapes.RECTANGLE);
                  }
-                 else if(forme == "CIRCLE") {
+                 else if(forme.equals("CIRCLE")) {
                    randomColorShape(shapes.CERCLE);
                  }
                  break;
-                 
-              case RANDOM_LOC:
-                 abs_loc = random(300);
-                 ord_loc = random(300);
-                 break;
-                 
-              case RANDOM_LOC_COLOR:
-              
-                 R = (int)random(0,255);
-                 G = (int)random(0,255);
-                 B = (int)random(0,255);
-                
-                 col = color(R,G,B);
-                
-                 abs_loc = random(300);
-                 ord_loc = random(300);
-                break;
                 
               case CREATE_GIVEN_PARAM:
-              
                 if (couleur == "RED"){
                   col = color(255, 0, 0);
                 }
@@ -299,8 +274,8 @@ void draw()
                 if (localisation == "HERE"){
                   get_mouse_coord = true;
                 }
-                
                 break;
+                
               case NO_CREATE:
                 println("There is nothing to create");
                 break;
