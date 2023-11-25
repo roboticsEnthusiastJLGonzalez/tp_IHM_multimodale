@@ -141,7 +141,6 @@ void setup()
   fill(0,255,0);
   f = loadFont("TwCenMT-Regular-24.vlw");
   state = INIT;
-  println("in setup");
   
   textFont(f,18);
   try
@@ -153,8 +152,6 @@ void setup()
     {
       public void receive(IvyClient client,String[] args)
       {
-        println("in bon binmsg");
-        //message = "Vous avez prononcé les concepts : " + args[0] + " avec un taux de confiance de " + args[1];
         state = CONCEPT;
         
         action = args[0];
@@ -162,12 +159,11 @@ void setup()
         forme = args[2];
         couleur= args[3];
         localisation= args[4];
+        
         score = args[5];
-        
-        conf = Float.parseFloat(score);
+        String modifiedString = score.replace(',', '.');
+        conf = Float.parseFloat(modifiedString);
         state_mae = set_state_mae();
-        
-        //message = action + " " + what+ " " + forme+ " " + couleur+ " " + localisation+ " " + score ;
       }        
     }
     );
