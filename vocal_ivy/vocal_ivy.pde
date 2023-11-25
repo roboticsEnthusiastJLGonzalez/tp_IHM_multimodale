@@ -29,6 +29,8 @@ color col ;
 float abs_loc ;
 float ord_loc ;
 float conf;
+shapes myShape ;
+
 
 boolean get_mouse_coord = false;
             
@@ -97,6 +99,13 @@ void randomColorShape(shapes shape){
   color col = color(random(255), random(255), color(255));
   fill(col);
   drawShape(shape);
+}
+
+void colorShape(shapes shape, color col){
+
+  fill(col);
+  drawShape(shape);
+
 }
 
 create_mae set_state_mae(){
@@ -238,42 +247,70 @@ void draw()
          println("conf >= 0.8");
          if (action.equals("CREATE")){
             println("in CREATE");
-            switch(state_mae){
-              case RANDOM_COLOR :
-                 if(!mousePressed){
+            if(!mousePressed){
                    break;
                  }
-                 if(forme.equals("TRIANGLE")) {
-                     randomColorShape(shapes.TRIANGL);
+                 
+            if(forme.equals("TRIANGLE")) {
+                   myShape =  shapes.TRIANGL;
                  }
-                 else if(forme.equals("RECTANGLE")) {
-                   randomColorShape(shapes.RECTANGLE);
+            else if(forme.equals("RECTANGLE")) {
+                   myShape = shapes.RECTANGLE;
                  }
-                 else if(forme.equals("CIRCLE")) {
-                   randomColorShape(shapes.CERCLE);
+            else if(forme.equals("CIRCLE")) {
+                  myShape = shapes.CERCLE;
                  }
+            else {}
+            switch(state_mae){
+              
+                 
+              
+              
+              
+              
+              case RANDOM_COLOR :
+               
+                 randomColorShape(myShape);
+                 
                  break;
                 
               case CREATE_GIVEN_PARAM:
-                if (couleur == "RED"){
+                if (couleur.equals("RED")){
+                  
+                  
                   col = color(255, 0, 0);
+                  colorShape(myShape, col);
+                  
                 }
-                else if (couleur == "GREEN" ){
+                else if (couleur.equals("GREEN")){
                   col = color(0,255,0);
+                  colorShape(myShape, col);
+
                 }
-                else if (couleur == "BLUE" ){
+                else if (couleur.equals("BLUE")){
                   col = color(0,0,255);
+                  colorShape(myShape, col);
+
                 }
-                else if (couleur == "YELLOW" ){
-                  col = color(0,170,170);
+                else if (couleur.equals("YELLOW")){
+                  col = color(255,255,0);
+                  colorShape(myShape, col);
+                }
+                else if (couleur.equals("ORANGE")){
+                  col = color(255,165,0);
+                  colorShape(myShape, col);
+                }
+                else if (couleur.equals("PURPLE")){
+                  col = color(128,0,128);
+                  colorShape(myShape, col);
                 }
                 else {  
-                  col = color(200,170,0);
+                  col = color(0,0,0);
+                  colorShape(myShape, col);
                 }
                 
-                if (localisation == "HERE"){
-                  get_mouse_coord = true;
-                }
+                
+                
                 break;
                 
               case NO_CREATE:
