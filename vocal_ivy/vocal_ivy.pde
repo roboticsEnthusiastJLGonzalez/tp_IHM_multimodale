@@ -8,7 +8,7 @@
  */
  
 import fr.dgac.ivy.*;
-import 
+
 
 // data
 
@@ -31,9 +31,11 @@ float abs_loc ;
 float ord_loc ;
 float conf;
 
-shapes myShape;
+ArrayList<Shape> formes = new ArrayList<>() ;
 
-Shape shape ;
+
+
+Shape myShape ;
 
 
 boolean get_mouse_coord = false;
@@ -71,61 +73,15 @@ public enum create_mae{
     RANDOM_LOC,
     RANDOM_LOC_COLOR,
     CREATE_GIVEN_PARAM,
+    MOTION,
     NO_CREATE
 
 }
 
-MyTriangle tri;
-  
-public enum shapes{
-  TRIANGL,
-  RECTANGLE,
-  CERCLE
-}
 
-class MyTriangle{
-  float x,y,hLen;
-
-  //Center point and side length
-  MyTriangle(float cx, float cy,float length){
-    x=cx;
-    y=cy;
-    hLen=length/2;
-  }
-
-  void draw(){
-    triangle(x-hLen, y-hLen, x+hLen, y-hLen, x, y+hLen);  
-  }
-}
-
-void drawShape(shapes shape) {
-  if(shape == shapes.TRIANGL) {
-    tri=new MyTriangle(mouseX,mouseY,100);
-    tri.draw();
-  }
-  else if(shape == shapes.RECTANGLE) {
-    rectMode(CENTER);
-    rect(mouseX, mouseY, 100, 100);
-  }
-  else if(shape == shapes.CERCLE) {
-    circle(mouseX, mouseY, 100);
-  }
-}
-
-void randomColorShape(shapes shape){
-  color col = color(random(255), random(255), color(255));
-  fill(col);
-  drawShape(shape);
-}
-
-void colorShape(shapes shape, color col){
-
-  fill(col);
-  drawShape(shape);
-
-}
 
 create_mae set_state_mae(){
+  
   println("CREATE");
   if (action.equals("CREATE")){
     println("in creat");
@@ -138,6 +94,10 @@ create_mae set_state_mae(){
       }
   }
   else if (action == "MOVE"){
+      
+    
+    return create_mae.MOTION;
+    
     
   }
   
@@ -269,13 +229,13 @@ void draw()
                  }
                  
             if(forme.equals("TRIANGLE")) {
-                   myShape =  shapes.TRIANGL;
+                   myShape = new Shape(form.TRIANGL, mouseX, mouseY)   ;
                  }
             else if(forme.equals("RECTANGLE")) {
-                   myShape = shapes.RECTANGLE;
+                  myShape = new Shape(form.RECTANGLE, mouseX, mouseY);
                  }
             else if(forme.equals("CIRCLE")) {
-                  myShape = shapes.CERCLE;
+                  myShape = new Shape(form.CERCLE, mouseX, mouseY);
                  }
             else {}
             switch(state_mae){
@@ -287,7 +247,7 @@ void draw()
               
               case RANDOM_COLOR :
                
-                 randomColorShape(myShape);
+                 myShape.display(true);
                  
                  break;
                 
@@ -295,39 +255,39 @@ void draw()
                 if (couleur.equals("RED")){
                   
                   
-                  col = color(255, 0, 0);
-                  colorShape(myShape, col);
+                 myShape.setColor( color(255, 0, 0));
+                 myShape.display(false);
                   
                 }
                 else if (couleur.equals("GREEN")){
-                  col = color(0,255,0);
-                  colorShape(myShape, col);
+                  myShape.setColor(color(0,255,0));
+                  myShape.display(false);
 
                 }
                 else if (couleur.equals("BLUE")){
-                  col = color(0,0,255);
-                  colorShape(myShape, col);
+                  myShape.setColor(color(0,0,255));
+                  myShape.display(false);
 
                 }
                 else if (couleur.equals("YELLOW")){
-                  col = color(255,255,0);
-                  colorShape(myShape, col);
+                  myShape.setColor(color(255,255,0));
+                  myShape.display(false);
                 }
                 else if (couleur.equals("ORANGE")){
-                  col = color(255,165,0);
-                  colorShape(myShape, col);
+                  myShape.setColor(color(255,165,0));
+                  myShape.display(false);
                 }
                 else if (couleur.equals("PURPLE")){
-                  col = color(128,0,128);
-                  colorShape(myShape, col);
+                  myShape.setColor( color(128,0,128));
+                  myShape.display(false);
                 }
                 else {  
-                  col = color(0,0,0);
-                  colorShape(myShape, col);
+                  myShape.setColor(color(0,0,0));
+                  myShape.display(false);
                 }
                 
                 
-                
+                formes.add(myShape);
                 break;
                 
               case NO_CREATE:
@@ -339,8 +299,26 @@ void draw()
                 break;
             }
          }
-         else if( action == "MOVE" ) {
-          // move function
+         else if( action.equals( "MOVE") ) {
+           
+           if (mousePressed && formes.size() > 0 ){
+             
+             for (Shape shape : formes){
+             // Check if the mouse is over the shape
+            if (shape.isPointInside(mouseX, mouseY)) {
+            // Select the shape on the first click
+            shape.select();
+            println("in here");
+            
+          }         
+            
+            else {
+          // Move the shape to a new position on the second click
+            shape.move(mouseX, mouseY);
+              }
+          }
+                    
+        }
           
          }
          else {

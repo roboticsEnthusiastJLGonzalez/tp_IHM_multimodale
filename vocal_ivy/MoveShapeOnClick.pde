@@ -1,23 +1,90 @@
-class Shape {
+
+ public enum form{
+  TRIANGL,
+  RECTANGLE,
+  CERCLE
+}
+
+
+public class Shape {
+  form  maForme;  // forme
   float x, y;    // Position
-  float size;     // Size
-  color fillColor; // Color
+  int size = 100;
+  color fillColor = color(255,200,0)   ; // Color
   boolean isSelected; // Flag to track selection
 
   // Constructor
-  Shape(float x, float y, float size, color fillColor) {
+  Shape(form  maForme,float x, float y) {
+    this.maForme = maForme ;
     this.x = x;
     this.y = y;
-    this.size = size;
-    this.fillColor = fillColor;
+    
+    //this.fillColor = fillColor;
     this.isSelected = false;
   }
+  
+  
+MyTriangle tri;
+ 
+
+class MyTriangle{
+  float x,y,hLen;
+
+  //Center point and side length
+  MyTriangle(float cx, float cy,float length){
+    x=cx;
+    y=cy;
+    hLen=length/2;
+  }
+
+  void draw(){
+    triangle(x-hLen, y-hLen, x+hLen, y-hLen, x, y+hLen);  
+  }
+}
+
+void setColor(color col ){
+
+  this.fillColor = col;
+
+}
+
+void drawShape(form shape) {
+  if(shape == form.TRIANGL) {
+    tri = new MyTriangle(mouseX,mouseY,100);
+    tri.draw();
+  }
+  else if(shape == form.RECTANGLE) {
+    rectMode(CENTER);
+    rect(mouseX, mouseY, 100, 100);
+  }
+  else if(shape == form.CERCLE) {
+    circle(mouseX, mouseY, 100);
+  }
+}
+
+void randomColorShape(form shape){
+  color col = color(random(255), random(255), color(255));
+  fill(col);
+  drawShape(shape);
+}
+
+void colorShape(form shape, color col){
+
+  fill(col);
+  drawShape(shape);
+
+}
 
   // Draw the shape
-  void display() {
-    fill(fillColor);
-    ellipse(x, y, size, size); // Example: Draw an ellipse
+  void display(boolean isRandom) {
+    
+    if (isRandom){randomColorShape(this.maForme) ;}
+    
+    else { colorShape(this.maForme, this.fillColor);}
+    
+     // Example: Draw an ellipse
     // You can modify this to draw other shapes as needed
+    
   }
 
   // Check if a point is inside the shape
@@ -27,7 +94,7 @@ class Shape {
 
   // Select the shape
   void select() {
-    isSelected = true;
+    this.isSelected = true;
   }
 
   // Move the shape to a new position if it is selected
@@ -35,7 +102,7 @@ class Shape {
     if (isSelected) {
       this.x = newX;
       this.y = newY;
-      isSelected = false; // Deselect after moving
+      this.isSelected = false; // Deselect after moving
     }
   }
 }
