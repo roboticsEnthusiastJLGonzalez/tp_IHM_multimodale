@@ -8,6 +8,7 @@
  */
  
 import fr.dgac.ivy.*;
+import 
 
 // data
 
@@ -41,6 +42,19 @@ public static final int ATTENTE = 1;
 public static final int TEXTE = 2;
 public static final int CONCEPT = 3;
 public static final int NON_RECONNU = 4;
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 public enum action_type{
   CREER,
