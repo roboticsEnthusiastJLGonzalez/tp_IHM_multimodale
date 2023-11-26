@@ -30,7 +30,10 @@ color col ;
 float abs_loc ;
 float ord_loc ;
 float conf;
-shapes myShape ;
+
+shapes myShape;
+
+Shape shape ;
 
 
 boolean get_mouse_coord = false;
