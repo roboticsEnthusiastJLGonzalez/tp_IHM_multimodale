@@ -1,4 +1,4 @@
-# tp_IHM_multimodale
+# Tp_IHM_multimodale
 
 
 ## Instructions pour executer le projet
